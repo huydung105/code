@@ -19,9 +19,9 @@ struct Student {
 // Node cho cây nhị phân tìm kiếm
 struct Node {
     Student data;
-    Node* left;
-    Node* right;
-    Node(Student s) : data(s), left(nullptr), right(nullptr) {}
+    Node* left; //Trỏ đến nút con bên trái.
+    Node* right; //Trỏ đến nút con bên phải.
+    Node(Student s) : data(s), left(nullptr), right(nullptr) {} //giúp khởi tạo Node mới với dữ liệu Student.
 };
 
 // Hàm đọc file
@@ -34,20 +34,20 @@ vector<Student> readFile(string filename) {
     }
 
     string id, name;
-    int year;
+    int year; 
     float gpa;
     while (file >> id >> name >> year >> gpa) {
         students.push_back(Student(id, name, year, gpa));
     }
     file.close();
-    return students;
+    return students; //Lưu vào vector<Student> và trả về danh sách sinh viên.
 }
 
 // 1. Tìm kiếm tuyến tính
 Student linearSearch(vector<Student>& students, string targetId) {
     for (int i = 0; i < students.size(); i++) {
         if (students[i].id == targetId) {
-            return students[i];
+            return students[i]; //Duyệt từng phần tử trong danh sách sinh viên.
         }
     }
     return Student(); // Trả về sinh viên rỗng nếu không tìm thấy
@@ -55,10 +55,11 @@ Student linearSearch(vector<Student>& students, string targetId) {
 
 // Hàm hỗ trợ cho Quick Sort
 int partition(vector<Student>& arr, int low, int high) {
-    string pivot = arr[high].id;
+    string pivot = arr[high].id; //phần tử cuối Sắp xếp lại mảng sao cho các phần tử nhỏ hơn pivot nằm bên trái 
+                                //Hoán đổi vị trí và trả về chỉ mục pivot
     int i = low - 1;
     for (int j = low; j < high; j++) {
-        if (arr[j].id <= pivot) {
+        if (arr[j].id <= pivot) { 
             i++;
             swap(arr[i], arr[j]);
         }
@@ -67,7 +68,7 @@ int partition(vector<Student>& arr, int low, int high) {
     return i + 1;
 }
 
-void quickSort(vector<Student>& arr, int low, int high) {
+void quickSort(vector<Student>& arr, int low, int high) { //Gọi đệ quy để sắp xếp hai phần của mảng trước và sau pivon
     if (low < high) {
         int pi = partition(arr, low, high);
         quickSort(arr, low, pi - 1);
@@ -78,17 +79,17 @@ void quickSort(vector<Student>& arr, int low, int high) {
 // 2. Tìm kiếm nhị phân (yêu cầu mảng đã sắp xếp)
 Student binarySearch(vector<Student>& students, string targetId) {
     int left = 0;
-    int right = students.size() - 1;
+    int right = students.size() - 1; 
     
-    while (left <= right) {
-        int mid = left + (right - left) / 2;
-        if (students[mid].id == targetId) {
+    while (left <= right) { 
+        int mid = left + (right - left) / 2; //Tìm vị trí giữa (mid)
+        if (students[mid].id == targetId) { //Nếu id[mid] == targetId, trả về sinh viên
             return students[mid];
         }
         if (students[mid].id < targetId) {
-            left = mid + 1;
+            left = mid + 1; //Nếu nhỏ hơn, tìm ở nửa phải
         } else {
-            right = mid - 1;
+            right = mid - 1; //Nếu lớn hơn, tìm ở nửa trái
         }
     }
     return Student(); // Không tìm thấy
@@ -99,7 +100,7 @@ class BST {
 private:
     Node* root;
     
-    Node* insert(Node* node, Student s) {
+    Node* insert(Node* node, Student s) { //Chèn sinh viên vào cây insert
         if (node == nullptr) {
             return new Node(s);
         }
@@ -111,7 +112,7 @@ private:
         return node;
     }
     
-    Student search(Node* node, string id) {
+    Student search(Node* node, string id) { //Tìm kiếm sinh viên theo id
         if (node == nullptr) {
             return Student();
         }
@@ -132,17 +133,17 @@ public:
     }
     
     Student search(string id) {
-        return search(root, id);
+        return search(root, id);    
     }
 };
 
 // Hàm hiển thị thông tin sinh viên
-void displayStudent(Student s) {
+void displayStudent(Student s) { 
     if (s.id.empty()) {
-        cout << "Khong tim thay sinh vien!" << endl;
+        cout << "Khong tim thay sinh vien!" << endl; //Kiểm tra nếu không tìm thấy thì in thông báo 
         return;
     }
-    cout << "Ma SV: " << s.id << endl;
+    cout << "Ma SV: " << s.id << endl; 
     cout << "Ho ten: " << s.name << endl;
     cout << "Nam sinh: " << s.birthYear << endl;
     cout << "Diem TB: " << s.gpa << endl;
